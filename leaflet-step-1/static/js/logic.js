@@ -46,12 +46,7 @@ function createMap(quakes) {
         zoom: 4, // pretty wide
         layers: [outdoors, quakes]
     });
-    
-    // // Add the layer control to the map
-    // L.control.layers(baseMaps, overlayMaps, {
-    //     collapsed: false
-    //   }).addTo(myMap);
-  
+      
     // Add a legend
     var info = L.control({
         position: "bottomright"
@@ -62,24 +57,6 @@ function createMap(quakes) {
     }
     info.addTo(myMap);
     document.querySelector(".legend").innerHTML=displayLegend();
-};
-
-
-function chooseColor(mag){
-    switch(true){
-        case (mag<1):
-            return "green";
-        case (mag<2):
-            return "greenyellow";
-        case (mag<3):
-            return "gold";
-        case (mag<4):
-            return "DarkOrange";
-        case (mag<5):
-            return "Peru";
-        default:
-            return "red";
-    };
 };
 
 // Create a single marker for each feacher
@@ -95,36 +72,62 @@ function makeMarker(feature, location){
     }
     return L.circleMarker(location, options);
 };
-    
+
+var graphInfo = [{
+    limit: 1,
+    label: "Mag: 0-1",
+    color: "green"
+},
+{
+    limit: 2,
+    label: "Mag: 1-2",
+    color: "greenyellow"
+},
+{
+    limit: 3,
+    label: "Mag: 2-3",
+    color: "gold"
+},
+{
+    limit: 4,
+    label: "Mag: 3-4",
+    color: "DarkOrange"
+},
+{
+    limit: 5,
+    label: "Mag: 4-5",
+    color: "Peru"
+},
+{
+    limit: 10,
+    label: "Mag: 5+",
+    color: "red"
+}];
+
+function chooseColor(mag){
+    switch (true) {
+        case (mag <= graphInfo[0].limit):
+            return "green";
+        case (mag <= graphInfo[1].limit):
+            return "greenyellow";
+        case (mag <= graphInfo[2].limit):
+            return "gold";
+        case (mag <= graphInfo[3].limit):
+            return "DarkOrange";
+        case (mag <= graphInfo[4].limit):
+            return "Peru";
+        default:
+            return "red";
+    };
+};
+
+
 function displayLegend(){
-    var legendInfo = [{
-        limit: "Mag: 0-1",
-        color: "green"
-    },{
-        limit: "Mag: 1-2",
-        color: "greenyellow"
-    },{
-        limit:"Mag: 2-3",
-        color:"gold"
-    },{
-        limit:"Mag: 3-4",
-        color:"DarkOrange"
-    },{
-        limit:"Mag: 4-5",
-        color:"Peru"
-    },{
-        limit:"Mag: 5+",
-        color:"red"
-    }];
-
-    var strng = "";
-   
-    for (i = 0; i < legendInfo.length; i++){
-        strng += "<p style = \"background-color: "+legendInfo[i].color+"\">"+legendInfo[i].limit+"</p> ";
+    var strng = "<p";
+    for (i = 0; i < graphInfo.length; i++){
+        strng += "<p style = \"background-color: "+graphInfo[i].color+"\">"+graphInfo[i].label+"</p> ";
     }
-    
     return strng;
-
 }
 
 
